@@ -50,7 +50,7 @@ function App() {
       <main>
         <ImageGrid images={IMAGES} onImageClick={handleImageClick} />
       </main>
-      <ImageModal image={selectedImage} onClose={handleClose} />
+      <ImageModal image={selectedImage} onClose={handleClose} images={IMAGES} onSelectImage={handleImageClick} />
     </div>
   );
 }
