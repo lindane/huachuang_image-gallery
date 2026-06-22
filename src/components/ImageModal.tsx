@@ -11,9 +11,11 @@ interface ImageModalProps {
   onClose: () => void;
   images: ImageItem[];
   onSelectImage: (image: ImageItem) => void;
+  favoriteIds: Set<number>;
+  onToggleFavorite: (id: number) => void;
 }
 
-const ImageModal: React.FC<ImageModalProps> = ({ image, onClose, images, onSelectImage }) => {
+const ImageModal: React.FC<ImageModalProps> = ({ image, onClose, images, onSelectImage, favoriteIds, onToggleFavorite }) => {
   const [displayImage, setDisplayImage] = useState<ImageItem | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -106,6 +108,38 @@ const ImageModal: React.FC<ImageModalProps> = ({ image, onClose, images, onSelec
       >
         ×
       </button>
+
+      {image && (
+        <button
+          className="absolute top-4 right-20 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 transition-all duration-200 group"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleFavorite(image.id);
+          }}
+          aria-label={favoriteIds.has(image.id) ? '取消收藏' : '收藏'}
+        >
+          <span className={`relative w-6 h-6 transition-transform duration-200 group-active:scale-90`}>
+            <span
+              className={`absolute left-0 rounded-t-full -rotate-45 origin-bottom-left transition-colors duration-200 ${
+                favoriteIds.has(image.id) ? 'bg-rose-500' : 'bg-white'
+              }`}
+              style={{ top: '6px', width: '12px', height: '18px' }}
+            />
+            <span
+              className={`absolute right-0 rounded-t-full rotate-45 origin-bottom-right transition-colors duration-200 ${
+                favoriteIds.has(image.id) ? 'bg-rose-500' : 'bg-white'
+              }`}
+              style={{ top: '6px', width: '12px', height: '18px' }}
+            />
+            <span
+              className={`absolute left-1/2 -translate-x-1/2 rotate-45 transition-colors duration-200 ${
+                favoriteIds.has(image.id) ? 'bg-rose-500' : 'bg-white'
+              }`}
+              style={{ bottom: '2px', width: '14px', height: '14px' }}
+            />
+          </span>
+        </button>
+      )}
 
       {currentIndex > 0 && (
         <button

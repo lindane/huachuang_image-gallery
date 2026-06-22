@@ -9,9 +9,10 @@ interface ImageItem {
 interface ImageGridProps {
   images: ImageItem[];
   onImageClick: (image: ImageItem) => void;
+  favoriteIds?: Set<number>;
 }
 
-const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick }) => {
+const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick, favoriteIds }) => {
   const [errorStates, setErrorStates] = useState<Record<number, boolean>>({});
   const [retryKeys, setRetryKeys] = useState<Record<number, number>>({});
 
@@ -85,6 +86,24 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, onImageClick }) => {
             </div>
           )}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 pointer-events-none" />
+          {favoriteIds?.has(image.id) && (
+            <div className="absolute top-2 right-2 z-10">
+              <span className="relative w-5 h-5 inline-block drop-shadow-md">
+                <span
+                  className="absolute left-0 rounded-t-full -rotate-45 origin-bottom-left bg-rose-500"
+                  style={{ top: '5px', width: '10px', height: '15px' }}
+                />
+                <span
+                  className="absolute right-0 rounded-t-full rotate-45 origin-bottom-right bg-rose-500"
+                  style={{ top: '5px', width: '10px', height: '15px' }}
+                />
+                <span
+                  className="absolute left-1/2 -translate-x-1/2 rotate-45 bg-rose-500"
+                  style={{ bottom: '2px', width: '11px', height: '11px' }}
+                />
+              </span>
+            </div>
+          )}
         </div>
       ))}
     </div>
